@@ -1,2 +1,10 @@
 module.exports.authValidation = require('./auth.validation');
 module.exports.userValidation = require('./user.validation');
+module.exports.familyValidation = require('./characteristics/family.validation');
+module.exports.subFamilyValidation = require('./characteristics/sub_family.validation');
+module.exports.productStateValidation = require('./characteristics/product_state.validation');
+module.exports.uomValidation = require('./characteristics/uom.validation');
+module.exports.productTypeValidation = require('./characteristics/product_type.validation');
+module.exports.storageConditionValidation = require('./characteristics/storage_condition.validation');
+module.exports.precautionOfUseValidation = require('./characteristics/precaution_of_use.validation');
+module.exports.rawMaterialValidation = require('./raw_material/raw_material.validation');

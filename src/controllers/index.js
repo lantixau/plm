@@ -1,2 +1,9 @@
 module.exports.authController = require('./auth.controller');
 module.exports.userController = require('./user.controller');
+module.exports.familyController = require('./characteristics/family.controller');
+module.exports.subFamilyController = require('./characteristics/sub_family.controller');
+module.exports.uomController = require('./characteristics/uom.controller');
+module.exports.productTypeController = require('./characteristics/product_type.controller');
+module.exports.storageConditionController = require('./characteristics/storage_condition.controller');
+module.exports.precautionOfUseController = require('./characteristics/precaution_of_use.controller');
+module.exports.rawMaterialController = require('./raw_material/raw_material.controller');

@@ -1,2 +1,9 @@
 module.exports.Token = require('./token.model');
 module.exports.User = require('./user.model');
+module.exports.Family = require('./characteristics/family.model');
+module.exports.SubFamily = require('./characteristics/sub_family.model');
+module.exports.ProductState = require('./characteristics/product_state.model');
+module.exports.UOM = require('./characteristics/uom.model');
+module.exports.ProductType = require('./characteristics/product_type.model');
+module.exports.PrecautionOfUse = require('./characteristics/precaution_of_use.model');
+module.exports.RawMaterial = require('./raw_material/raw_material.model');
