@@ -13,6 +13,7 @@ const query = {
     name: Joi.string(),
     type_code: Joi.number(),
     sortBy: Joi.string(),
+    q: Joi.string().allow(null, ''),
     limit: Joi.number().integer(),
     page: Joi.number().integer(),
   }),

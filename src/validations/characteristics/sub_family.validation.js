@@ -15,12 +15,13 @@ const getSubFamilies = {
     sortBy: Joi.string(),
     limit: Joi.number().integer(),
     page: Joi.number().integer(),
+    q: Joi.string().allow(null, ''),
   }),
 };
 
 const getSubFamily = {
   params: Joi.object().keys({
-    subFamilyId: Joi.string().custom(objectId)
+    subFamilyId: Joi.string().custom(objectId),
   }),
 };
 

@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { SubFamily } = require('../../models');
+const { SubFamily, Family } = require('../../models');
 const ApiError = require('../../utils/ApiError');
 
 /**
@@ -10,7 +10,9 @@ const ApiError = require('../../utils/ApiError');
 const createSubFamily = async (subFamilyBody) => {
   if (await SubFamily.isNameTaken(subFamilyBody.name))
     throw new ApiError(httpStatus.BAD_REQUEST, 'Sub family name already taken');
-  const subFamily = await SubFamily.create(subFamilyBody);
+  const subFamily = await SubFamily.create(subFamilyBody).then(function(sFamily) {
+    return Family.findOneAndUpdate({ _id: subFamilyBody.parent }, {$push: {sub_families: sFamily._id}}, { new: true });
+  })
   return subFamily;
 };
 

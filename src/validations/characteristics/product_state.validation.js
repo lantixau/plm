@@ -15,6 +15,7 @@ const query = {
     sortBy: Joi.string(),
     limit: Joi.number().integer(),
     page: Joi.number().integer(),
+    q: Joi.string().allow(null, ''),
   }),
 };
 

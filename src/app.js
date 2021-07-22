@@ -13,8 +13,16 @@ const { authLimiter } = require('./middlewares/rateLimiter');
 const routes = require('./routes/v1');
 const { errorConverter, errorHandler } = require('./middlewares/error');
 const ApiError = require('./utils/ApiError');
+const fs = require('fs');
+const path = require('path');
+const filemanagerMiddleware = require('@opuscapita/filemanager-server').middleware;
 
 const app = express();
+
+const fileManagerConfig = {
+  fsRoot: path.resolve(__dirname, './documents'),
+  rootName: 'Documents',
+};
 
 if (config.env !== 'test') {
   app.use(morgan.successHandler);
@@ -52,6 +60,9 @@ if (config.env === 'production') {
 
 // v1 api routes
 app.use('/v1', routes);
+
+const fileManagerBaseUrl = '/filemanager';
+app.use(fileManagerBaseUrl, filemanagerMiddleware(fileManagerConfig));
 
 // send back a 404 error for any unknown api request
 app.use((req, res, next) => {

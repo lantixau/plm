@@ -2,14 +2,20 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const { toJSON, paginate } = require('./plugins');
-const { roles } = require('../config/roles');
+const { boolean } = require('joi');
 
 const userSchema = mongoose.Schema(
   {
-    name: {
+    fullName: {
       type: String,
       required: true,
       trim: true,
+    },
+    username: {
+      type: String,
+      required: true,
+      trim: true,
+      unique: true,
     },
     email: {
       type: String,
@@ -36,14 +42,62 @@ const userSchema = mongoose.Schema(
       private: true, // used by the toJSON plugin
     },
     role: {
-      type: String,
-      enum: roles,
-      default: 'user',
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'UserRole',
     },
     isEmailVerified: {
       type: Boolean,
       default: false,
     },
+    biodata: {
+      type: String,
+      trim: true,
+    },
+    birthdate: {
+      type: Date,
+    },
+    country: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Area',
+    },
+    website: {
+      type: String,
+      trim: true,
+    },
+    phone: {
+      type: String,
+      trim: true,
+    },
+    twitter: {
+      type: String,
+      trim: true,
+    },
+    facebook: {
+      type: String,
+      trim: true,
+    },
+    linkedIn: {
+      type: String,
+      trim: true,
+    },
+    instagram: {
+      type: String,
+      trim: true,
+    },
+    quora: {
+      type: String,
+      trim: true,
+    },
+    ability: [
+      {
+        actions: [String],
+        subject: String,
+        isModifiable: {
+          type: Boolean,
+          default: false,
+        },
+      },
+    ],
   },
   {
     timestamps: true,

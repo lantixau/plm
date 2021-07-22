@@ -4,7 +4,7 @@ const ApiError = require('../../utils/ApiError');
 const catchAsync = require('../../utils/catchAsync');
 const { rawMaterialService } = require('../../services');
 
-const singularName = 'Raw Of Material';
+const singularName = 'Raw Material';
 
 const create = catchAsync(async (req, res) => {
   const response = await rawMaterialService.create(req.body);
@@ -13,7 +13,7 @@ const create = catchAsync(async (req, res) => {
 
 const query = catchAsync(async (req, res) => {
   const filter = pick(req.query, ['type_code']);
-  const options = pick(req.query, ['sortBy', 'limit', 'page']);
+  const options = pick(req.query, ['sortBy', 'limit', 'page', 'exclude']);
   const response = await rawMaterialService.query(filter, options);
   res.send(response);
 });
@@ -23,6 +23,7 @@ const getById = catchAsync(async (req, res) => {
   if (!response) {
     throw new ApiError(httpStatus.NOT_FOUND, singularName + ' not found');
   }
+  console.log(response);
   res.send(response);
 });
 

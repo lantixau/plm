@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { User } = require('../models');
+const { User, UserRole } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -35,7 +35,18 @@ const queryUsers = async (filter, options) => {
  * @returns {Promise<User>}
  */
 const getUserById = async (id) => {
-  return User.findById(id);
+  const user = await User.findById(id);
+  // Merging Abilities
+  const userAbilities = user.ability;
+  // Fetching Role Abilities
+  const userRole = await UserRole.findById(user.role);
+  const roleAbilities = userRole.ability;
+  // Merging Abilities
+  var subjects = new Set(userAbilities.map((d) => d.subject));
+  var mergedAbilities = [...userAbilities, ...roleAbilities.filter((d) => !subjects.has(d.subject))];
+  user.ability = mergedAbilities;
+  console.log(user.ability);
+  return user;
 };
 
 /**
@@ -54,13 +65,34 @@ const getUserByEmail = async (email) => {
  * @returns {Promise<User>}
  */
 const updateUserById = async (userId, updateBody) => {
-  const user = await getUserById(userId);
+  const user = await User.findById(userId);
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
   if (updateBody.email && (await User.isEmailTaken(updateBody.email, userId))) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
   }
+  if (updateBody.ability.length > 0) {
+    updateBody.ability.forEach((rule) => {
+      const existingRule = user.ability.find((dbRule) => dbRule.id === rule._id);
+      if (rule.deleteThisRule === true) {
+        const existingRuleIndex = user.ability.findIndex((dbRule) => dbRule.id === rule._id);
+        user.ability.splice(existingRuleIndex, 1);
+      } else {
+        if (existingRule) {
+          if (rule.actions) {
+            existingRule.actions = rule.actions;
+          }
+          if (rule.subject) {
+            existingRule.subject = rule.subject;
+          }
+        } else {
+          if (rule.actions && rule.subject) user.ability.push(rule);
+        }
+      }
+    });
+  }
+  delete updateBody.ability;
   Object.assign(user, updateBody);
   await user.save();
   return user;

@@ -2,7 +2,7 @@ const httpStatus = require('http-status');
 const { RawMaterial } = require('../../models');
 const ApiError = require('../../utils/ApiError');
 
-const singularName = "Raw Material";
+const singularName = 'Raw Material';
 
 /**
  * Create a new document
@@ -27,6 +27,11 @@ const create = async (body) => {
  */
 const query = async (filter, options) => {
   const response = await RawMaterial.paginate(filter, options);
+  if (options['exclude']) {
+    response.results = response.results.filter(function (r) {
+      return r._id != options['exclude'];
+    });
+  }
   return response;
 };
 
@@ -36,7 +41,7 @@ const query = async (filter, options) => {
  * @returns {Promise<QueryResult>}
  */
 const getById = async (id) => {
-  return (await RawMaterial.findOne({_id: id}));
+  return await RawMaterial.findOne({ _id: id });
 };
 
 /**

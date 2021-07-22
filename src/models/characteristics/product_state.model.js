@@ -9,9 +9,7 @@ const schema = mongoose.Schema(
             type: String,
             required: true,
             trim: true,
-            unique: true,
-            lowercase: true,
-
+            unique: true
         },
         type_code: {
             type: Number,
